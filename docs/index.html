@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="1 Introduction | Modern Statistics for Modern Biology" />
+<meta property="og:type" content="book" />
+
+
+
+
+<meta name="author" content="Susan Holmes, Wolfgang Huber" />
+
+<meta name="date" content="2022-06-30" />
+
+
+<meta name="description" content="1 Introduction | Modern Statistics for Modern Biology">
+
+<title>1 Introduction | Modern Statistics for Modern Biology</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/envisioned.css" rel="stylesheet" />
+<link href="libs/msmb-css-0/msmb.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+
+if(f.classList.contains('fa-plus-square')) {
+    f.classList.add('fa-minus-square')
+    f.classList.remove('fa-plus-square')
+} else {
+    f.classList.add('fa-plus-square')
+    f.classList.remove('fa-minus-square')
+}
+
+}
+</script>
+<script>
+function copy_link(id) {
+  var dummy = document.createElement('input'),
+  text = window.location.href.split(/[?#]/)[0] + '#' + id;
+  document.body.appendChild(dummy);
+  dummy.value = text;
+  dummy.select();
+  document.execCommand('copy');
+  document.body.removeChild(dummy);
+  
+  var tooltip = document.getElementById(id + '-tooltip');
+  tooltip.innerHTML = 'Copied!';
+}
+
+function reset_tooltip(id) {
+  var tooltip = document.getElementById(id);
+  tooltip.innerHTML = 'Copy link';
+}
+</script>
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul class="navbar">
+<li class="msmb"><p class="title">Modern Statistics for Modern Biology<p><p class="author">Susan Holmes, Wolfgang Huber</p>
+<li class="dropdown" style="float:right">
+<a href="javascript:void(0)" class="dropbtn">&#x25BE; Chapters</a>
+<div class="dropdown-content">
+<a href=""><span class="toc-section-number">1</span> Introduction</a>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="introduction" class="section level1" number="1">
+<h1>
+<span class="header-section-number">1</span> Introduction</h1>
+<p>The two instances of <em>modern</em> in the title of this book reflect the two major recent revolutions in biological data analyses:</p>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="https://web.stanford.edu/class/bios221/book/images/WringingFlood_web.png"></span></span></p>
+<ul>
+<li><p>Biology, formerly a science with sparse, often only qualitative data has turned into a field whose production of quantitative data is on par with high energy physics or astronomy, and whose data are wildly more heterogeneous and complex.</p></li>
+<li><p>Statistics, a field that in the 20th century had become an application ground for probability theory and calculus, often taught loaded with notation and perceived with a heavy emphasis on hypothesis testing, has been transformed by the ubiquity of computers and of data in machine-readable form. Exploratory data analysis, visualization, resampling, simulations, pragmatic hybridizations of Bayesian ideas and methods with frequentist data analysis have become part of the toolset.</p></li>
+</ul>
+<p>The aim of this book is to enable scientists working in biological research to quickly learn many of the important ideas and methods that they need to make the best of their experiments and of other available data. The book takes a hands-on approach. The narrative in each chapter is driven by classes of questions, or by certain data types. Methods and theory are introduced on a need-to-know basis. We don’t try to systematically deduce from first principles. The book will often throw readers into the pool and hope they can swim in spite of so many missing details.</p>
+<p>By no means this book will replace systematic training in underlying theory: probability, linear algebra, computer science, databases, multivariate statistics. Such training takes many semesters of coursework. Perhaps the book will whet your appetite to engage more deeply with one of these fields.</p>
+<div id="the-challenge-heterogeneity" class="section level2" number="1.1">
+<h2>
+<span class="header-section-number">1.1</span> The challenge: heterogeneity<div class="tooltip"><button class="internal-link-btn" onclick="copy_link('the-challenge-heterogeneity')" onmouseout="reset_tooltip('the-challenge-heterogeneity-tooltip')"><span class="tooltiptext" id="the-challenge-heterogeneity-tooltip">Copy link</span><i class="fa fa-link"></i></button></div>
+</h2>
+<p>Any biological system or organism is composed of tens of thousands of components, which can be in different states and interact in multiple ways. Modern biology aims to understand such systems by acquiring comprehensive –and this means high-dimensional– data in their temporal and spatial context, with multiple covariates and interactions. Dealing with this complexity will be our primary challenge. This includes real, biological complexity as well as the complexities and heterogeneities of the data we are able to acquire with our always imperfect instruments.</p>
+<p>Biological data come in all sorts of shapes: nucleic acid and protein sequences, rectangular tables of counts, multiple tables, continuous variables, batch factors, phenotypic images, spatial coordinates. Besides data measured in lab experiments, there are clinical data, longitudinal information, environmental measurements, networks, lineage trees, annotation from biological databases in free text or controlled vocabularies, …</p>
+<blockquote>
+<p>“Homogeneous data are all alike; all heterogeneous data are heterogeneous in their own way.” The Anna Karenina principle.</p>
+</blockquote>
+<p>It is this heterogeneity that motivates our choice of R and Bioconductor as the computational platform for this book – some more on this below.</p>
+</div>
+<div id="whats-in-this-book" class="section level2" number="1.2">
+<h2>
+<span class="header-section-number">1.2</span> What’s in this book?<div class="tooltip"><button class="internal-link-btn" onclick="copy_link('whats-in-this-book')" onmouseout="reset_tooltip('whats-in-this-book-tooltip')"><span class="tooltiptext" id="whats-in-this-book-tooltip">Copy link</span><i class="fa fa-link"></i></button></div>
+</h2>
+
+</div>
+</div>
+<p style="text-align: center;">
+</p>
+<p class="build-date">Page built: 
+2022-06-30
+ using 
+R version 4.2.1 (2022-06-23 ucrt)
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>
