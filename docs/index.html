@@ -13,7 +13,7 @@
 
 <meta name="author" content="Susan Holmes, Wolfgang Huber" />
 
-<meta name="date" content="2022-06-30" />
+<meta name="date" content="2022-07-10" />
 
 
 <meta name="description" content="1 Introduction | Modern Statistics for Modern Biology">
@@ -63,6 +63,28 @@ function reset_tooltip(id) {
 
 
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 
 </head>
@@ -79,7 +101,11 @@ function reset_tooltip(id) {
 <li class="dropdown" style="float:right">
 <a href="javascript:void(0)" class="dropbtn">&#x25BE; Chapters</a>
 <div class="dropdown-content">
-<a href=""><span class="toc-section-number">1</span> Introduction</a>
+<a id="active-page" href="index.html" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a><ul class="toc-sections">
+<li class="toc"><a href="#the-challenge-heterogeneity"> The challenge: heterogeneity</a></li>
+<li class="toc"><a href="#whats-in-this-book"> What’s in this book?</a></li>
+</ul>
+<a href="references.html" id="toc-references">References</a>
 </div>
 </li>
 </ul>
@@ -114,13 +140,22 @@ function reset_tooltip(id) {
 <h2>
 <span class="header-section-number">1.2</span> What’s in this book?<div class="tooltip"><button class="internal-link-btn" onclick="copy_link('whats-in-this-book')" onmouseout="reset_tooltip('whats-in-this-book-tooltip')"><span class="tooltiptext" id="whats-in-this-book-tooltip">Copy link</span><i class="fa fa-link"></i></button></div>
 </h2>
-
+<p>Figure <a href="index.html#fig:FisherParadigm">1.1</a> outlines a sequential view of statistical data analysis. Motivated by the groundbreaking work on significance and hypothesis testing in the 1930s by <span class="citation">Fisher (<a href="#ref-DoE" role="doc-biblioref">1935</a>)</span></p>
+<p>
+<span class="marginnote shownote">
+<!--
+<div class="figure">--><span style="display:block;" id="fig:FisherParadigm"></span>
+<img src="https://web.stanford.edu/class/bios221/book/images/FisherParadigm.png" alt="The hypothesis testing paradigm recommended by R.A. Fisher starts with the formulation of a null hypothesis and the design of an experiment before the collection of any data. We could think in a similarly schematic way about model fitting – just replace *Hypothesis H0* by *Parametric Model* and by *Fit Parameters*."><!--
+<p class="caption marginnote">-->Figure 1.1: The hypothesis testing paradigm recommended by R.A. Fisher starts with the formulation of a null hypothesis and the design of an experiment before the collection of any data. We could think in a similarly schematic way about model fitting – just replace <em>Hypothesis H0</em> by <em>Parametric Model</em> and by <em>Fit Parameters</em>.<!--</p>-->
+<!--</div>--></span>
+</p>
 </div>
 </div>
 <p style="text-align: center;">
+<a href="references.html"><button class="btn btn-default">Next</button></a>
 </p>
 <p class="build-date">Page built: 
-2022-06-30
+2022-07-10
  using 
 R version 4.2.1 (2022-06-23 ucrt)
 </p>

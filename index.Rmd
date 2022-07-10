@@ -45,3 +45,10 @@ It is this heterogeneity that motivates our choice of R and Bioconductor as the 
 
 ## What’s in this book?
 
+Figure \@ref(fig:FisherParadigm) outlines a sequential view of statistical data analysis. Motivated by the groundbreaking work on significance and hypothesis testing in the 1930s by @DoE
+
+```{r FisherParadigm, fig.cap = "The hypothesis testing paradigm recommended by R.A. Fisher starts with the formulation of a null hypothesis and the design of an experiment before the collection of any data. We could think in a similarly schematic way about model fitting – just replace *Hypothesis H0* by *Parametric Model* and by *Fit Parameters*.", fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("https://web.stanford.edu/class/bios221/book/images/FisherParadigm.png")
+```
+
+`r if (knitr::is_html_output()) '# References {-}'`
