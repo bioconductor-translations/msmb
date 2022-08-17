@@ -1,0 +1,185 @@
+{
+    "sources": [
+        {
+            "author": [
+                {
+                    "family": "Fisher",
+                    "given": "Ronald Aylmer"
+                }
+            ],
+            "id": "DoE",
+            "issued": {
+                "date-parts": [
+                    [
+                        1935
+                    ]
+                ]
+            },
+            "title": "The design of experiments",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.R-project.org/",
+            "author": [
+                {
+                    "literal": "R Core Team"
+                }
+            ],
+            "id": "R-base",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "publisher": "R Foundation for Statistical Computing",
+            "publisher-place": "Vienna, Austria",
+            "title": "R: A language and environment for statistical computing",
+            "title-short": "R",
+            "type": "book"
+        },
+        {
+            "URL": "https://CRAN.R-project.org/package=bookdown",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                }
+            ],
+            "id": "R-bookdown",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "note": "R package version 0.7",
+            "title": "Bookdown: Authoring books and technical documents with r markdown",
+            "title-short": "Bookdown",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Smith",
+                    "given": "Mike"
+                }
+            ],
+            "id": "R-msmbstyle",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "note": "R package version 0.0.1",
+            "title": "Msmbstyle: MSMB styles for r markdown documents",
+            "title-short": "Msmbstyle",
+            "type": "book"
+        },
+        {
+            "URL": "https://CRAN.R-project.org/package=rmarkdown",
+            "author": [
+                {
+                    "family": "Allaire",
+                    "given": "JJ"
+                },
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                },
+                {
+                    "family": "McPherson",
+                    "given": "Jonathan"
+                },
+                {
+                    "family": "Luraschi",
+                    "given": "Javier"
+                },
+                {
+                    "family": "Ushey",
+                    "given": "Kevin"
+                },
+                {
+                    "family": "Atkins",
+                    "given": "Aron"
+                },
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                },
+                {
+                    "family": "Cheng",
+                    "given": "Joe"
+                },
+                {
+                    "family": "Chang",
+                    "given": "Winston"
+                }
+            ],
+            "id": "R-rmarkdown",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "note": "R package version 1.10",
+            "title": "Rmarkdown: Dynamic documents for r",
+            "title-short": "Rmarkdown",
+            "type": "book"
+        },
+        {
+            "URL": "https://CRAN.R-project.org/package=tufte",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                },
+                {
+                    "family": "Allaire",
+                    "given": "JJ"
+                }
+            ],
+            "id": "R-tufte",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "note": "R package version 0.4",
+            "title": "Tufte: Tufte’s styles for r markdown documents",
+            "title-short": "Tufte",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Holmes",
+                    "given": "Susan"
+                },
+                {
+                    "family": "Huber",
+                    "given": "Wolfgang"
+                }
+            ],
+            "id": "MSMB",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "title": "Modern statistics for modern biology",
+            "type": "book"
+        }
+    ],
+    "project_biblios": []
+}

@@ -1,4 +1,0 @@
-fig:FisherParadigm
-introduction
-the-challenge-heterogeneity
-whats-in-this-book
