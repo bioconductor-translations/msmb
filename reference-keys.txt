@@ -1,0 +1,10 @@
+fig:FisherParadigm
+fig:iterativeparadigm
+fig:roulette
+fig:devil
+introduction
+the-challenge-heterogeneity
+whats-in-this-book
+computational-tools-for-modern-biologists
+the-challenge-heterogeneity-1
+how-to-read-this-book
