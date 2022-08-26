@@ -1,15 +1,8 @@
 fig:FisherParadigm
 fig:iterativeparadigm
-fig:roulette
-fig:devil
+fig:structuralescal
 fig:chap1-Poisson5-1
-introduction
-the-challenge-heterogeneity
-whats-in-this-book
-computational-tools-for-modern-biologists
-the-challenge-heterogeneity-1
-how-to-read-this-book
-generative-models-for-discrete-data
+Chap-Generative
 goals-for-this-chapter
 a-real-example
 using-discrete-probability-models
