@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="2 Generative Models for Discrete Data | Modern Statistics for Modern Biology" />
+<meta property="og:type" content="book" />
+
+
+
+
+<meta name="author" content="Susan Holmes, Wolfgang Huber" />
+
+<meta name="date" content="2022-08-26" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="2 Generative Models for Discrete Data | Modern Statistics for Modern Biology">
+
+<title>2 Generative Models for Discrete Data | Modern Statistics for Modern Biology</title>
+
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/envisioned.css" rel="stylesheet" />
+<link href="libs/msmb-css-0/msmb.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+
+if(f.classList.contains('fa-plus-square')) {
+    f.classList.add('fa-minus-square')
+    f.classList.remove('fa-plus-square')
+} else {
+    f.classList.add('fa-plus-square')
+    f.classList.remove('fa-minus-square')
+}
+
+}
+</script>
+<script>
+function copy_link(id) {
+  var dummy = document.createElement('input'),
+  text = window.location.href.split(/[?#]/)[0] + '#' + id;
+  document.body.appendChild(dummy);
+  dummy.value = text;
+  dummy.select();
+  document.execCommand('copy');
+  document.body.removeChild(dummy);
+  
+  var tooltip = document.getElementById(id + '-tooltip');
+  tooltip.innerHTML = 'Copied!';
+}
+
+function reset_tooltip(id) {
+  var tooltip = document.getElementById(id);
+  tooltip.innerHTML = 'Copy link';
+}
+</script>
+
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul class="navbar">
+<li class="msmb"><p class="title">Modern Statistics for Modern Biology<p><p class="author">Susan Holmes, Wolfgang Huber</p>
+<li class="dropdown" style="float:right">
+<a href="javascript:void(0)" class="dropbtn">&#x25BE; Chapters</a>
+<div class="dropdown-content">
+<a href="index.html" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a>
+<a href="references.html" id="toc-references">References</a>
+<a id="active-page" href="generative-models-for-discrete-data.html" id="toc-generative-models-for-discrete-data"><span class="toc-section-number">2</span> Generative Models for Discrete Data</a><ul class="toc-sections">
+<li class="toc"><a href="#goals-for-this-chapter"> Goals for this chapter</a></li>
+<li class="toc"><a href="#a-real-example"> A real example</a></li>
+<li class="toc"><a href="#using-discrete-probability-models"> Using discrete probability models</a></li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="generative-models-for-discrete-data" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Generative Models for Discrete Data</h1>
+<p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="https://www.huber.embl.de/msmb/images/Pile_ou_face.png"></span></span></p>
+<p>In molecular biology, many situations involve counting events: how many
+codons use a certain spelling, how many reads of DNA match a reference,
+how many CG digrams are observed in a DNA sequence. These counts give us
+<em>discrete</em> variables, as opposed to quantities such as mass and
+intensity that are measured on <em>continuous</em> scales.</p>
+<p>If we know the rules that the mechanisms under study follow, even if the
+outcomes are random, we can generate the probabilities of any events we
+are interested in by computations and standard probability laws. This is
+a <em>top-down</em> approach based on deduction and our knowledge of how to
+manipulate probabilities. In
+Chapter <a href="https://www.huber.embl.de/msmb/Chap-Models.html#Chap:Models">2</a>,
+you will see how to combine this with data-driven (<em>bottom-up</em>)
+statistical modeling.</p>
+<div id="goals-for-this-chapter" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Goals for this chapter<div class="tooltip"><button class="internal-link-btn" onclick="copy_link('goals-for-this-chapter')" onmouseout="reset_tooltip('goals-for-this-chapter-tooltip')"><span class="tooltiptext" id="goals-for-this-chapter-tooltip">Copy link</span><i class="fa fa-link"></i></button></div>
+</h2>
+<p>In this chapter we will:</p>
+<ul>
+<li><p>Learn how to obtain the probabilities of all possible outcomes from
+a given model and see how we can compare the theoretical frequencies
+with those observed in real data.</p></li>
+<li><p>Explore a complete example of how to use the Poisson distribution to
+analyse data on epitope detection.</p></li>
+<li><p>See how we can experiment with the most useful generative models for
+discrete data: Poisson, binomial, multinomial.</p></li>
+<li><p>Use the <strong>R</strong> functions for computing probabilities and counting
+rare events.</p></li>
+<li><p>Generate random numbers from specified distributions.</p></li>
+</ul>
+</div>
+<div id="a-real-example" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> A real example<div class="tooltip"><button class="internal-link-btn" onclick="copy_link('a-real-example')" onmouseout="reset_tooltip('a-real-example-tooltip')"><span class="tooltiptext" id="a-real-example-tooltip">Copy link</span><i class="fa fa-link"></i></button></div>
+</h2>
+<p>Let’s dive into an example where we have a probability model for the
+data generating process. Our model says that mutations along the genome
+of HIV (Human Immunodeficiency Virus) occur with a rate of
+<span class="math inline">\(5 \times 10^{-4}\)</span> per nucleotide per replication cycle. The rate is the
+same at each nucleotide position, and mutations at one position happen
+independently of what happens at other positions.
+<label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote">In practice, and strictly speaking, complete and utter independence will rarely hold in reality, if you look close enough. Thus, what modellers usually mean with such assertions is that any possible correlations or dependencies are so weak and rare that ignoring them is a good enough approximation.</span>
+The genome size of HIV is about <span class="math inline">\(10^4=10,000\)</span> nucleotides, thus, after
+one cycle, the total number of mutations will follow a <strong>Poisson</strong>
+distribution
+<label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote">We will give more details later about this type of probability distribution.</span>
+with rate <span class="math inline">\(5 \times 10^{-4} \times 10^4 = 5\)</span>. What does that tell us?</p>
+<p>This probability model predicts that the number of mutations over one
+replication cycle will be close to 5, and that the variability of this
+estimate is <span class="math inline">\(\sqrt{5}\)</span> (the standard error). We now have baseline
+reference values for both the number of mutations we expect to see in a
+typical HIV strain and its variability.</p>
+<p>In fact, we can deduce even more detailed information. If we want to
+know how often 3 mutations could occur under the Poisson(5) model, we
+can use an R function to generate the probability of seeing <span class="math inline">\(x=3\)</span>
+events, taking the value of the <strong>rate parameter</strong> of the Poisson
+distribution, called lambda (λ
+<label for="tufte-mn-5" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle"><span class="marginnote">Greek letters such as λ and μ often denote important parameters that characterize the probability distributions we use.</span>
+), to be 5.</p>
+<pre><code>dpois(x = 3, lambda = 5)
+
+## [1] 0.1403739</code></pre>
+<p>This says the chance of seeing exactly three events is around 0.14, or
+about 1 in 7.</p>
+<p>If we want to generate the probabilities of all values from 0 to 12, we
+do not need to write a loop. We can simply set the first argument to be
+the <strong>vector</strong> of these 13 values, using R’s sequence operator, the
+colon “<code>:</code>”. We can see the probabilities by plotting them (Figure
+<a href="generative-models-for-discrete-data.html#fig:chap1-Poisson5-1">2.1</a>). As with this figure, most figures in the
+margins of this book are created by the code shown in the text.</p>
+<p><label for="tufte-mn-6" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="http://web.stanford.edu/class/bios221/book/images/devil.png">
+Note how the output from R is formatted: the first line begins with the
+first item in the vector, hence the [1], and the second line begins with
+the 9th item, hence the [9]. This helps you keep track of elements in
+long vectors. The term vector is R parlance for an ordered list of
+elements of the same type (in this case, numbers).</span></span></p>
+<p>
+<span class="marginnote shownote">
+<!--
+<div class="figure">--><span style="display:block;" id="fig:chap1-Poisson5-1"></span>
+<img src="http://web.stanford.edu/class/bios221/book/figure/chap1-Poisson5-1.png" alt="Figure 1.1: Probabilities of seeing 0,1,2,…,12 mutations, as modeled by the Poisson(5) distribution. The plot shows that we will often see 4 or 5 mutations but rarely as many as 12. The distribution continues to higher numbers (13, ...), but the probabilities will be successively smaller, and here we don’t visualize them."><!--
+<p class="caption marginnote">-->Figure 2.1: Figure 1.1: Probabilities of seeing 0,1,2,…,12 mutations, as modeled by the Poisson(5) distribution. The plot shows that we will often see 4 or 5 mutations but rarely as many as 12. The distribution continues to higher numbers (13, …), but the probabilities will be successively smaller, and here we don’t visualize them.<!--</p>-->
+<!--</div>--></span>
+</p>
+<pre><code>0:12
+
+##  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12
+
+dpois(x = 0:12, lambda = 5)
+
+##  [1] 0.0067 0.0337 0.0842 0.1404 0.1755 0.1755 0.1462 0.1044
+##  [9] 0.0653 0.0363 0.0181 0.0082 0.0034
+
+barplot(dpois(0:12, 5), names.arg = 0:12, col = "red")</code></pre>
+<p>Mathematical theory tells us that the Poisson probability of seeing the
+value x is given by the formula e−λλx/x!. In this book, we’ll discuss
+theory from time to time, but give preference to displaying concrete
+numeric examples and visualizations like Figure
+<a href="generative-models-for-discrete-data.html#fig:chap1-Poisson5-1">2.1</a>.</p>
+<p>The Poisson distribution is a good model for rare events such as
+mutations. Other useful probability models for <strong>discrete events</strong> are
+the Bernoulli, binomial and multinomial distributions. We will explore
+these models in this chapter.</p>
+</div>
+<div id="using-discrete-probability-models" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Using discrete probability models<div class="tooltip"><button class="internal-link-btn" onclick="copy_link('using-discrete-probability-models')" onmouseout="reset_tooltip('using-discrete-probability-models-tooltip')"><span class="tooltiptext" id="using-discrete-probability-models-tooltip">Copy link</span><i class="fa fa-link"></i></button></div>
+</h2>
+<p>A point mutation can either occur or not; it is a binary event. The two
+possible outcomes (yes, no) are called the <strong>levels</strong> of the categorical
+variable.</p>
+<p><label for="tufte-mn-7" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-7" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="http://web.stanford.edu/class/bios221/book/images/devil.png">
+Think of a categorical variable as having different alternative values.
+These are the levels, similar to the different alternatives at a gene
+locus: alleles.</span></span></p>
+<p>Not all events are binary. For example, the genotypes in a diploid
+organism can take three levels (AA, Aa, aa).</p>
+<p>Sometimes the number of levels in a categorical variable is very large;
+examples include the number of different types of bacteria in a
+biological sample (hundreds or thousands) and the number of codons
+formed of 3 nucleotides (64 levels).</p>
+<p>When we measure a categorical variable on a sample, we often want to
+tally the frequencies of the different levels in a vector of counts. R
+has a special encoding for categorical variables and calls them
+<strong>factors</strong>
+<label for="tufte-mn-8" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-8" class="margin-toggle"><span class="marginnote">R makes sure that the factor variable will accept no other, “illegal” values, and this is useful for keeping your calculations safe.</span>
+. Here we capture the different blood genotypes for 19 subjects in a
+vector which we tabulate.</p>
+<p><label for="tufte-mn-9" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-9" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="http://web.stanford.edu/class/bios221/book/images/devil.png"><code>c()</code> is one of the most basic functions. It collates
+elements of the same type into a vector. In the code shown here, the
+elements of <code>genotype</code> are character strings.</span></span></p>
+<pre><code>genotype = c("AA","AO","BB","AO","OO","AO","AA","BO","BO",
+             "AO","BB","AO","BO","AB","OO","AB","BB","AO","AO")
+table(genotype)
+
+## genotype
+## AA AB AO BB BO OO 
+##  2  2  7  3  3  2</code></pre>
+<p>On creating a <em>factor</em>, R automatically detects the levels. You can
+access the levels with the <code>levels</code> function.</p>
+<pre><code>genotypeF = factor(genotype)
+levels(genotypeF)
+
+## [1] "AA" "AB" "AO" "BB" "BO" "OO"
+
+table(genotypeF)
+
+## genotypeF
+## AA AB AO BB BO OO 
+##  2  2  7  3  3  2</code></pre>
+<div id="ques:one" class="question">
+<p class="question-begin">
+► Question 1
+</p>
+<div class="question-body">
+<p>
+What if you want to create a factor that has some levels not yet in your data?
+</p>
+<p class="question-end">
+<span class="fa fa-square-o solution-icon"></span>
+</p>
+</div>
+</div>
+<div class="msmb-solution">
+<p class="solution-begin">
+► Solution<span id="sol-start-1" class="fa fa-plus-square solution-icon clickable" onclick="toggle_visibility('sol-body-1', 'sol-start-1')"></span>
+</p>
+<div id="sol-body-1" class="solution-body" style="display: none;">
+<p>
+Look at the manual page of the factor function.
+</p>
+<p class="solution-end">
+<span class="fa fa-square-o solution-icon"></span>
+</p>
+</div>
+</div>
+<p><label for="tufte-mn-10" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-10" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="http://web.stanford.edu/class/bios221/book/images/devil.png"> It
+is not obvious from the output of the table function that the input was
+a factor; however if there had been another level with no instances, the
+table would also have contained that level, with a zero count.</span></span></p>
+<p>If the order in which the data are observed doesn’t matter, we call the
+random variable <strong>exchangeable</strong>. In that case, all the information
+available in the factor is summarized by the counts of the factor
+levels. We then say that the vector of frequencies is <strong>sufficient</strong> to
+capture all the relevant information in the data, thus providing an
+effective way of compressing the data.</p>
+<div id="bernoulli-trials" class="section level3" number="2.3.1">
+<h3>
+<span class="header-section-number">2.3.1</span> Bernoulli trials<div class="tooltip"><button class="internal-link-btn" onclick="copy_link('bernoulli-trials')" onmouseout="reset_tooltip('bernoulli-trials-tooltip')"><span class="tooltiptext" id="bernoulli-trials-tooltip">Copy link</span><i class="fa fa-link"></i></button></div>
+</h3>
+<p>Tossing a coin has two possible outcomes. This simple experiment, called
+a Bernoulli trial, is modeled using a so-called Bernoulli random
+variable. Understanding this building block will take you surprisingly
+far. We can use it to build more complex models.</p>
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Fisher, Ronald Aylmer. 1935. <em>The Design of Experiments</em>.
+</div>
+</div>
+</div>
+</div>
+</div>
+<p style="text-align: center;">
+<a href="references.html"><button class="btn btn-default">Previous</button></a>
+</p>
+<p class="build-date">Page built: 
+2022-08-26
+ using 
+R version 4.2.1 (2022-06-23 ucrt)
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>
