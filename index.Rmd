@@ -5,14 +5,13 @@ date: "`r Sys.Date()`"
 knit: "bookdown::preview_chapter"
 site: "bookdown::bookdown_site"
 link-citations: yes
-monofont: "Source Code Pro"
-monofontoptions: "Scale=0.7"
 output:
   msmbstyle::msmb_html_book:
     highlight: tango
     toc: TRUE
     toc_depth: 1
     split_by: chapter
+    split_bib: no
     margin_references: FALSE
 bibliography: msmbstyle-ex.bib
 editor_options: 
@@ -20,7 +19,14 @@ editor_options:
     wrap: 72
 ---
 
-# Introduction
+# Introduction {.unnumbered}
+
+```{r setup, include=FALSE}
+library(msmbstyle)
+# invalidate cache when the package version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('msmbstyle'))
+options(htmltools.dir.version = FALSE)
+```
 
 The two instances of *modern* in the title of this book reflect the two
 major recent revolutions in biological data analyses:
@@ -59,7 +65,7 @@ multivariate statistics. Such training takes many semesters of
 coursework. Perhaps the book will whet your appetite to engage more
 deeply with one of these fields.
 
-## The challenge: heterogeneity
+## The challenge: heterogeneity {.unnumbered}
 
 Any biological system or organism is composed of tens of thousands of
 components, which can be in different states and interact in multiple
@@ -76,7 +82,7 @@ variables, batch factors, phenotypic images, spatial coordinates.
 Besides data measured in lab experiments, there are clinical data,
 longitudinal information, environmental measurements, networks, lineage
 trees, annotation from biological databases in free text or controlled
-vocabularies, ...
+vocabularies, ......
 
 > "Homogeneous data are all alike; all heterogeneous data are
 > heterogeneous in their own way." The Anna Karenina principle.
@@ -84,7 +90,7 @@ vocabularies, ...
 It is this heterogeneity that motivates our choice of R and Bioconductor
 as the computational platform for this book -- some more on this below.
 
-## What's in this book?
+## What's in this book? {.unnumbered}
 
 ```{r FisherParadigm, fig.cap = "The hypothesis testing paradigm recommended by R.A. Fisher starts with the formulation of a null hypothesis and the design of an experiment before the collection of any data. We could think in a similarly schematic way about model fitting – just replace *Hypothesis H0* by *Parametric Model* and by *Fit Parameters*.", fig.margin=TRUE, echo=FALSE}
 knitr::include_graphics("https://web.stanford.edu/class/bios221/book/images/FisherParadigm.png")
@@ -92,65 +98,61 @@ knitr::include_graphics("https://web.stanford.edu/class/bios221/book/images/Fish
 
 Figure \@ref(fig:FisherParadigm) outlines a sequential view of
 statistical data analysis. Motivated by the groundbreaking work on
-significance and hypothesis testing in the 1930s by @DoE
+significance and hypothesis testing in the 1930s by @fisher1935design
+and @neyman1936sufficient, it is well amenable to mathematical
+formalism, especially the part where we compute the distribution of test
+statistics under a hypothesis (null or alternative), or where we need to
+set up distributional assumptions and can search for analytical
+approximations.
 
 ```{r iterativeparadigm, fig.cap = "JW Tukey recommended starting any analysis with the data and wrote: “No catalogue of techniques can convey a willingness to look for what can be seen, whether or not anticipated.” (Holmes - Junca 1985)", fig.margin=TRUE, echo=FALSE}
 knitr::include_graphics("http://web.stanford.edu/class/bios221/book/images/iterativeparadigm.png")
 ```
 
 Real scientific discovery rarely works in the caricature manner of
-Figure [0.1](http://web.stanford.edu/class/bios221/book/introduction.html#fig:intro-Fisher).
-Tukey
-([1977](http://web.stanford.edu/class/bios221/book/introduction.html#ref-Tukey77))
-emphasized two separate approaches. The first he termed **exploratory
-data analysis** (**EDA**). EDA uses the data themselves to decide how to
-conduct the statistical analysis. EDA is built on simple tools for
-plotting data. EDA is complemented by **confirmatory data analyses**
-(CDA): robust inferential methods that do not rely on complex
-assumptions to reach scientific conclusions. Tukey recommended an
-iterative approach schematized in
-Figure [0.2](http://web.stanford.edu/class/bios221/book/introduction.html#fig:intro-iterative)
-that enable us to see the data at different resolutions and from
-different perspectives. This enables the refinement of our understanding
-of the data.
+Figure \@ref(fig:FisherParadigm). @tukey1976exploratory emphasized two
+separate approaches. The first he termed **exploratory data analysis**
+(**EDA**). EDA uses the data themselves to decide how to conduct the
+statistical analysis. EDA is built on simple tools for plotting data.
+EDA is complemented by **confirmatory data analyses** (CDA): robust
+inferential methods that do not rely on complex assumptions to reach
+scientific conclusions. Tukey recommended an iterative approach
+schematized in Figure \@ref(fig:iterativeparadigm) that enable us to see
+the data at different resolutions and from different perspectives. This
+enables the refinement of our understanding of the data.
 
-Biology in the late 1990s raised the **large-**pp small-nn problem:
-consider a gene expression dataset for n=200n=200 patient samples on
-p=20000p=20000 genes. If we want to construct a regression or
-classification model that \"predicts\" a clinical variable, for instance
+Biology in the late 1990s raised the **large-**$p$ **small-**$n$
+**problem**: consider a gene expression dataset for $n=200$ patient
+samples on $p=20000$ genes. If we want to construct a regression or
+classification model that "predicts" a clinical variable, for instance
 the disease type or outcome, from the 20,000 genes, or features, we
-immediately run into problems11 Called *non-identifiabilty* or
-*overfitting*., since the number of model parameters would have to be
-orders of magnitudes larger than the number of replicate measurements
-nn. At least, this is the case for common models, say, an ordinary
-linear model. Statisticians realized that they could remedy the
-situation by requiring sparsity through the use of regularization
-techniques (Hastie, Tibshirani, and Friedman
-[2008](http://web.stanford.edu/class/bios221/book/introduction.html#ref-HastieTibshiraniFriedman)),
-i.e., by requiring that many of the potential parameters are either zero
-or at least close to it.
+immediately run into problems [^1] , since the number of model
+parameters would have to be orders of magnitudes larger than the number
+of replicate measurements $n$. At least, this is the case for common
+models, say, an ordinary linear model. Statisticians realized that they
+could remedy the situation by requiring sparsity through the use of
+regularization techniques @hastie2009elements, i.e., by requiring that
+many of the potential parameters are either zero or at least close to
+it.
+
+[^1]: Called *non-identifiabilty* or *overfitting*.
 
 A generalization of the sparsity principle is attained by invoking one
 of the most powerful recent ideas in high-dimensional statistics, which
-goes under the name of **empirical Bayes**: we don\'t try to learn the
+goes under the name of **empirical Bayes**: we don't try to learn the
 parameters associated with each feature from scratch, but rather use the
 fact that some or all of them will be similar, or even the same, across
 all features, or across groups of related features. There are several
-important book long treatments (Efron
-[2010](http://web.stanford.edu/class/bios221/book/introduction.html#ref-Efron2010))
-of the subject of large scale inference so essential in modern
-estimation and hypotheses testing.
+important book long treatments (@efron2012large) of the subject of large
+scale inference so essential in modern estimation and hypotheses
+testing.
 
-```{r roulette, fig.cap = "We'll use this icon to identify when we are using a Monte Carlo approximation method. This name for the method is used because it uses randomness, similar to the randomness of casino games. Ironically, for many casino games the probabilities of winning is not known analytically, and casinos use their own empirical data to evaluate the odds of winning.", fig.margin=TRUE, echo=FALSE}
-knitr::include_graphics("http://web.stanford.edu/class/bios221/book/images/roulette.png")
+```{marginfigure}
+<img src="http://web.stanford.edu/class/bios221/book/images/roulette.png" width="30%">
+We'll use this icon to identify when we are using a Monte Carlo approximation method.
+This name for the method is used because it uses randomness, similar to the randomness of casino games.
+Ironically, for many casino games the probabilities of winning is not known analytically, and casinos use their own empirical data to evaluate the odds of winning.
 ```
-
-We'll use this icon to identify when we are using a Monte Carlo
-approximation method. This name for the method is used because it uses
-randomness, similar to the randomness of casino games. Ironically, for
-many casino games the probabilities of winning is not known
-analytically, and casinos use their own empirical data to evaluate the
-odds of winning.
 
 *Simulations* play an essential role in this book, as many of the
 results we need escape the reach of standard analytic approaches. In
@@ -163,113 +165,92 @@ their applications to current biological research. We cover many
 different types of data that modern biologists have to deal with,
 including RNA-Seq, flow-cytometry, taxa abundances, imaging data and
 single cell measurements. We assume no prior training in statistics.
-However, you\'ll need some familiarity with R and willingness to engage
+However, you'll need some familiarity with R and willingness to engage
 in mathematical and analytical thinking.
 
 *Generative models* are our basic building blocks. In order to draw
 conclusions about complicated data it tends to be useful to have simple
 models for the data generated under this or that situation. We do this
 through the use of probability theory and generative models, which we
-introduce in
-Chapter [1](http://web.stanford.edu/class/bios221/book/Chap-Generative.html#Chap:Generative).
-We will use examples from immunology and DNA analysis to describe useful
-generative models for biological data: binomial, multinomial and Poisson
-random variables.
+introduce in Chapter \@ref(Chap-Generative).
+We will use examples from immunology and DNA
+analysis to describe useful generative models for biological data:
+binomial, multinomial and Poisson random variables.
 
 Once we know how data would look like under a certain model, we can
 start working our way backwards: given some data, what model is most
 likely able to explain it? This *bottom up approach* is the core of
-statistical thinking, and we explain it in
-Chapter [2](http://web.stanford.edu/class/bios221/book/Chap-Models.html#Chap:Models).
+statistical thinking, and we explain it in Chapter \@ref(Chap-Models).
 
-We saw the primary role of *graphics* in Tukey\'s scheme
-(Figure [0.2](http://web.stanford.edu/class/bios221/book/introduction.html#fig:intro-iterative)),
-and so we\'ll learn how to visualize our data in
-Chapter [3](http://web.stanford.edu/class/bios221/book/Chap-Graphics.html#Chap:Graphics).
-We\'ll use the grammar of graphics and
+We saw the primary role of *graphics* in Tukey's scheme (Figure
+\@ref(fig:iterativeparadigm) ), and so we'll learn how to visualize our
+data in Chapter \@ref(Chap-Graphics).
+We'll use the grammar of graphics and
 [**ggplot2**](https://cran.r-project.org/web/packages/ggplot2/).
 
 Real biological data often have more complex distributional properties
-than what we could cover in
-Chapter [1](http://web.stanford.edu/class/bios221/book/Chap-Generative.html#Chap:Generative).
-We\'ll use mixtures that we explore in
-Chapter [4](http://web.stanford.edu/class/bios221/book/Chap-Mixtures.html#Chap:Mixtures);
-these enable us to build realistic models for heterogeneous biological
-data and provide solid foundations for choosing appropriate variance
-stabilizing transformations.
+than what we could cover in Chapter \@ref(Chap-Graphics).
+We'll use mixtures that we explore in Chapter \@ref(Chap-Mixtures);
+these enable us to build realistic models for
+heterogeneous biological data and provide solid foundations for choosing
+appropriate variance stabilizing transformations.
 
-The large, matrix-like (n×pn×p) datasets in biology naturally lend
+The large, matrix-like ($n\times p$) datasets in biology naturally lend
 themselves to clustering: once we define a distance measure between
 matrix rows (the features), we can cluster and group the genes by
 similarity of their expression patterns, and similarly, for the columns
-(the patient samples). We\'ll cover clustering in
-Chapter [5](http://web.stanford.edu/class/bios221/book/Chap-Clustering.html#Chap:Clustering).
-Since clustering only relies on distances, we can even apply it to data
-that are not matrix-shaped, as long as there are objects and distances
-defined between them.
+(the patient samples). We'll cover clustering in Chapter \@ref(Chap-Clustering).
+Since clustering only relies on distances,
+we can even apply it to data that are not matrix-shaped,
+as long as there are objects and distances defined between them.
 
 Further following the path of EDA, we cover the most fundamental
 unsupervised analysis method for simple matrices --*principal component
-analysis*-- in
-Chapter [7](http://web.stanford.edu/class/bios221/book/Chap-Multivariate.html#Chap:Multivariate).
-We turn to more heterogeneous data that combine multiple data types in
-Chapter [9](http://web.stanford.edu/class/bios221/book/Chap-MultivaHetero.html#Chap:MultivaHetero).
-There, we\'ll see nonlinear unsupervised methods for counts from single
-cell data. We\'ll also address how to use generalizations of the
-multivariate approaches covered in
-Chapter [7](http://web.stanford.edu/class/bios221/book/Chap-Multivariate.html#Chap:Multivariate)
-to combinations of categorical variables and multiple assays recorded on
-the same observational units.
+analysis*-- in Chapter \@ref(Chap-Multivariate).
+We turn to more heterogeneous data that combine multiple data types in Chapter \@ref(Chap-MultivaHetero).
+There, we'll see nonlinear unsupervised methods for counts from single cell data.
+We'll also address how to use generalizations of the multivariate approaches
+covered in Chapter \@ref(Chap-Multivariate) to combinations of categorical variables and
+multiple assays recorded on the same observational units.
 
-The basic hypothesis testing workflow outlined in
-Figure [0.1](http://web.stanford.edu/class/bios221/book/introduction.html#fig:intro-Fisher)
-is explained in
-Chapter [6](http://web.stanford.edu/class/bios221/book/Chap-Testing.html#Chap:Testing).
+The basic hypothesis testing workflow outlined in Figure \@ref(fig:FisherParadigm) is explained in Chapter \@ref(Chap-Testing).
 We use the opportunity to apply it to one of the most common queries to
-n×pn×p-datasets: which of the genes (features) are *associated with* a
-certain property of the samples, say, disease type or outcome? However,
-conventional significance thresholds would lead to lots of spurious
-associations: with a false positive rate of α=0.05α=0.05 we expect
-pα=1000pα=1000 false positives if none of the p=20000p=20000 features
-has a true association. Therefore we also need to deal with multiple
-testing.
+$n\times p$-datasets:
+which of the genes (features) are *associated with* a certain property of the samples, say, disease type or outcome?
+However, conventional significance thresholds would lead to lots of spurious associations:
+with a false positive rate of $\alpha=0.05$ we expect $p\alpha=1000$ false positives
+if none of the $p=20000$ features has a true association.
+Therefore we also need to deal with multiple testing.
 
 One of the most fruitful ideas in statistics is that of variance
-decomposition, or analysis of variance (ANOVA). We\'ll explore this, in
-the framework of linear models and generalized linear models, in
-Chapter [8](http://web.stanford.edu/class/bios221/book/Chap-CountData.html#Chap:CountData).
-Since we\'ll draw our example data from an RNA-Seq experiment, this
+decomposition, or analysis of variance (ANOVA). We'll explore this, in
+the framework of linear models and generalized linear models, in Chapter \@ref(Chap-CountData).
+Since we'll draw our example data from an RNA-Seq experiment, this
 gives us also an opportunity to discuss models for such count data, and
 concepts of *robustness*.
 
-Nothing in biology makes sense except in the light of evolution22
-Theodosius Dobzhansky,
-<https://en.wikipedia.org/wiki/Nothing_in_Biology_Makes_Sense_Except_in_the_Light_of_Evolution>,
+Nothing in biology makes sense except in the light of evolution^[Theodosius Dobzhansky, <https://en.wikipedia.org/wiki/Nothing_in_Biology_Makes_Sense_Except_in_the_Light_of_Evolution>],
 and evolutionary relationships are usefully encoded in phylogenetic
-trees. We\'ll explore networks and trees in
-Chapter [10](http://web.stanford.edu/class/bios221/book/Chap-Graphs.html#Chap:Graphs).
+trees. We\'ll explore networks and trees in Chapter \@ref(Chap-Graphs).
 
-A rich source of data in biology is images, and in
-Chapter [11](http://web.stanford.edu/class/bios221/book/Chap-Images.html#Chap:Images)
+A rich source of data in biology is images, and in Chapter \@ref(Chap-Images).
 we reinforce our willingness to do EDA on all sorts of heterogeneous
 data types by exploring feature extraction from images and spatial
 statistics.
 
-Finally in
-Chapter [12](http://web.stanford.edu/class/bios221/book/Chap-Supervised.html#Chap:Supervised),
+Finally in Chapter \@ref(Chap-Supervised),
 we will look at statistical learning, i.e., training an algorithm to
 distinguish between different types of objects depending on their
 multidimensional feature vector. We\'ll start simple with
 low-dimensional feature vectors and linear methods, and then explore
 classification in high-dimensional settings.
 
-We wrap up in
-Chapter [13](http://web.stanford.edu/class/bios221/book/Chap-Design.html#Chap:Design)
+We wrap up in Chapter \@ref(Chap-Design),
 with considerations on good practices in the design of experiments and
 of data analyses. For this we\'ll use and reflect what we have learned
 in the course of the preceding chapters.
 
-## Computational tools for modern biologists
+## Computational tools for modern biologists {.unnumbered}
 
 As we'll see over and over again, the analysis approaches, tools and
 choices to be made are manifold. Our work can only be validated by
@@ -318,104 +299,8 @@ constructs for elegant dplyr expressions, but this requires you to get
 acquainted with some of the novelties in there including tibbles, the
 group_by function and pipes (%\>%).
 
-Why R and Bioconductor? There are many reasons why we have chosen to
-present all analyses on the R (Ihaka and Gentleman 1996) and
-Bioconductor (Huber et al. 2015) platforms:Download R and Rstudio to
-follow the code in the book.
 
-Cutting edge solutions. The availability of over 10 , 000 packages
-ensures that almost all statistical methods are available, including the
-most recent developments. Moreover, there are implementations of or
-interfaces to many methods from computer science, mathematics, machine
-learning, data management, visualization and internet technologies. This
-puts thousands of person-years of work by experts at your finger tips.
-
-Open source and community-owned. R and Bioconductor have been built
-collaboratively by a large community of developers. They are constantly
-tried and tested by thousands of users.
-
-Data input and wrangling. Bioconductor packages support the reading of
-many of the data types and formats produced by measurement instruments
-used in modern biology, as well as the needed technology-specific
-"preprocessing" routines. The community is actively keeping these
-up-to-date with the rapid developments on the instrument market.
-
-Simulation. There are random number generators for every known
-statistical distribution and powerful numeric routines for linear
-algebra, optimization, etc.
-
-Visualization and presentation. R can make attractive,
-publication-quality graphics. We've dedicated Chapter 3 to this and
-practice data visualization extensively throughout the book.
-
-Easy to use interactive development environment. RStudio is easy and fun
-to use and helps with all aspects of programming in R. It is an
-essential piece in following the iterative approach to data analysis
-schematized in Figure 0.2.
-
-Reproducibilty. As an equivalent to the laboratory notebook that is
-standard good practice in labwork, we advocate the use of a
-computational diary written in the R markdown format. We use the knitr
-package to convert R markdown into easy-to-read and shareable HTML or
-PDF documents. These can even become full-fledged scientific articles or
-supplements. Together with a version control system, R markdown helps
-with tracking changes.
-
-Collaborative environment. R markdown enables the creation of websites
-containing code, text, figures and tables with a minimum of work.
-
-Rich data structures. The Bioconductor project has defined specialized
-data containers to represent complex biological datasets. These help to
-keep your data consistent, safe and easy to use.
-
-Interoperability and distributed development. Bioconductor in particular
-contains packages from diverse authors that cover a wide range of
-functionalities but still interoperate because of the common data
-containers.
-
-Documentation. Many R packages come with excellent documentation in
-their function manual pages and vignettes. The vignettes are usually the
-best starting point into a package, as they give you a high-level
-narrative on what the package does, whereas the manual pages give
-detailed information on input, output and inner workings of each
-function. There are online tutorials, fora and mailing lists for many
-aspects of working with R and Bioconductor.
-
-High-level language. R is an interpreted high-level language. Its roots
-in LISP and its functional programming features mean that code is data
-and can be computed on, which enables efficient programming and is fun.
-These features facilitate constructing powerful domain specific
-languages33 Examples include R's formula interface, the grammar of
-graphics in ggplot2, the data manipulation functionality of dplyr and R
-markdown.. R is not a fixed language -- throughout its history, it has
-been actively evolving and is constantly improving.
-
-## The challenge: heterogeneity
-
-Any biological system or organism is composed of tens of thousands of
-components, which can be in different states and interact in multiple
-ways. Modern biology aims to understand such systems by acquiring
-comprehensive --and this means high-dimensional-- data in their temporal
-and spatial context, with multiple covariates and interactions. Dealing
-with this complexity will be our primary challenge. This includes real,
-biological complexity as well as the complexities and heterogeneities of
-the data we are able to acquire with our always imperfect instruments.
-
-Biological data come in all sorts of shapes: nucleic acid and protein
-sequences, rectangular tables of counts, multiple tables, continuous
-variables, batch factors, phenotypic images, spatial coordinates.
-Besides data measured in lab experiments, there are clinical data,
-longitudinal information, environmental measurements, networks, lineage
-trees, annotation from biological databases in free text or controlled
-vocabularies, ......
-
-> "Homogeneous data are all alike; all heterogeneous data are
-> heterogeneous in their own way." The Anna Karenina principle.
-
-It is this heterogeneity that motivates our choice of R and Bioconductor
-as the computational platform for this book -- some more on this below.
-
-## How to read this book
+## How to read this book {.unnumbered}
 
 The printed version of this book is supplemented by an online version at
 <http://web.stanford.edu/class/bios221/book> or
@@ -435,8 +320,9 @@ be expected and no reason for worries, surprises or even comments. We
 recommend following the installation instructions --which includes
 getting the right, matching versions of everything-- on the webpage.
 
-```{r devil, fig.cap = "We will put notes and extra information under the devil icon, this is the devil who looks after the details.", fig.margin=TRUE, echo=FALSE}
-knitr::include_graphics("http://web.stanford.edu/class/bios221/book/images/devil.png")
+```{marginfigure}
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
+We will put notes and extra information under the devil icon, this is the devil who looks after the details.
 ```
 
 The chapters in the book build upon each other, but they are reasonably
@@ -449,5 +335,3 @@ markdown files (extension `.Rmd`) on the book's website. Each chapter
 concludes with a summary of the main points and a set of exercises. The
 book ends with an index and a concordance section, which should be
 useful when looking for specific topics.
-
-`r if (knitr::is_html_output()) '# References {-}'`

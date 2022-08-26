@@ -20,7 +20,7 @@ editor_options:
     wrap: 72
 ---
 
-# Generative Models for Discrete Data
+# Generative Models for Discrete Data {#Chap-Generative}
 
 ```{marginfigure}
 ![ ](https://www.huber.embl.de/msmb/images/Pile_ou_face.png)
