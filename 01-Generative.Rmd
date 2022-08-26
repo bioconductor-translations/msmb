@@ -1,0 +1,214 @@
+---
+title: "Modern Statistics for Modern Biology"
+author: "Susan Holmes, Wolfgang Huber"
+date: "`r Sys.Date()`"
+knit: "bookdown::preview_chapter"
+site: "bookdown::bookdown_site"
+link-citations: yes
+monofont: "Source Code Pro"
+monofontoptions: "Scale=0.7"
+output:
+  msmbstyle::msmb_html_book:
+    highlight: tango
+    toc: TRUE
+    toc_depth: 1
+    split_by: chapter
+    margin_references: FALSE
+bibliography: msmbstyle-ex.bib
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Generative Models for Discrete Data
+
+```{marginfigure}
+![ ](https://www.huber.embl.de/msmb/images/Pile_ou_face.png)
+```
+
+In molecular biology, many situations involve counting events: how many
+codons use a certain spelling, how many reads of DNA match a reference,
+how many CG digrams are observed in a DNA sequence. These counts give us
+*discrete* variables, as opposed to quantities such as mass and
+intensity that are measured on *continuous* scales.
+
+If we know the rules that the mechanisms under study follow, even if the
+outcomes are random, we can generate the probabilities of any events we
+are interested in by computations and standard probability laws. This is
+a *top-down* approach based on deduction and our knowledge of how to
+manipulate probabilities. In
+Chapter [2](https://www.huber.embl.de/msmb/Chap-Models.html#Chap:Models),
+you will see how to combine this with data-driven (*bottom-up*)
+statistical modeling.
+
+## Goals for this chapter
+
+In this chapter we will:
+
+-   Learn how to obtain the probabilities of all possible outcomes from
+    a given model and see how we can compare the theoretical frequencies
+    with those observed in real data.
+
+-   Explore a complete example of how to use the Poisson distribution to
+    analyse data on epitope detection.
+
+-   See how we can experiment with the most useful generative models for
+    discrete data: Poisson, binomial, multinomial.
+
+-   Use the **R** functions for computing probabilities and counting
+    rare events.
+
+-   Generate random numbers from specified distributions.
+
+## A real example
+
+Let's dive into an example where we have a probability model for the
+data generating process. Our model says that mutations along the genome
+of HIV (Human Immunodeficiency Virus) occur with a rate of
+$5 \times 10^{-4}$ per nucleotide per replication cycle. The rate is the
+same at each nucleotide position, and mutations at one position happen
+independently of what happens at other positions.
+`r tufte::margin_note('In practice, and strictly speaking, complete and utter independence will rarely hold in reality, if you look close enough. Thus, what modellers usually mean with such assertions is that any possible correlations or dependencies are so weak and rare that ignoring them is a good enough approximation.')`
+The genome size of HIV is about $10^4=10,000$ nucleotides, thus, after
+one cycle, the total number of mutations will follow a **Poisson**
+distribution
+`r tufte::margin_note('We will give more details later about this type of probability distribution.')`
+with rate $5 \times 10^{-4} \times 10^4 = 5$. What does that tell us?
+
+This probability model predicts that the number of mutations over one
+replication cycle will be close to 5, and that the variability of this
+estimate is $\sqrt{5}$ (the standard error). We now have baseline
+reference values for both the number of mutations we expect to see in a
+typical HIV strain and its variability.
+
+In fact, we can deduce even more detailed information. If we want to
+know how often 3 mutations could occur under the Poisson(5) model, we
+can use an R function to generate the probability of seeing $x=3$
+events, taking the value of the **rate parameter** of the Poisson
+distribution, called lambda (λ
+`r tufte::margin_note('Greek letters such as λ and μ often denote important parameters that characterize the probability distributions we use.')`
+), to be 5.
+
+    dpois(x = 3, lambda = 5)
+
+    ## [1] 0.1403739
+
+This says the chance of seeing exactly three events is around 0.14, or
+about 1 in 7.
+
+If we want to generate the probabilities of all values from 0 to 12, we
+do not need to write a loop. We can simply set the first argument to be
+the **vector** of these 13 values, using R's sequence operator, the
+colon "`:`". We can see the probabilities by plotting them (Figure
+\@ref(fig:chap1-Poisson5-1)). As with this figure, most figures in the
+margins of this book are created by the code shown in the text.
+
+```{marginfigure}
+![](http://web.stanford.edu/class/bios221/book/images/devil.png)
+Note how the output from R is formatted: the first line begins with the first item in the vector, hence the [1], and the second line begins with the 9th item, hence the [9]. This helps you keep track of elements in long vectors. The term vector is R parlance for an ordered list of elements of the same type (in this case, numbers).
+```
+
+```{r chap1-Poisson5-1, fig.cap = "Figure 1.1: Probabilities of seeing 0,1,2,…,12 mutations, as modeled by the Poisson(5) distribution. The plot shows that we will often see 4 or 5 mutations but rarely as many as 12. The distribution continues to higher numbers (13, ...), but the probabilities will be successively smaller, and here we don’t visualize them.", fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("http://web.stanford.edu/class/bios221/book/figure/chap1-Poisson5-1.png")
+```
+
+    0:12
+
+    ##  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12
+
+    dpois(x = 0:12, lambda = 5)
+
+    ##  [1] 0.0067 0.0337 0.0842 0.1404 0.1755 0.1755 0.1462 0.1044
+    ##  [9] 0.0653 0.0363 0.0181 0.0082 0.0034
+
+    barplot(dpois(0:12, 5), names.arg = 0:12, col = "red")
+
+Mathematical theory tells us that the Poisson probability of seeing the
+value x is given by the formula e−λλx/x!. In this book, we'll discuss
+theory from time to time, but give preference to displaying concrete
+numeric examples and visualizations like Figure
+\@ref(fig:chap1-Poisson5-1).
+
+The Poisson distribution is a good model for rare events such as
+mutations. Other useful probability models for **discrete events** are
+the Bernoulli, binomial and multinomial distributions. We will explore
+these models in this chapter.
+
+## Using discrete probability models
+
+A point mutation can either occur or not; it is a binary event. The two
+possible outcomes (yes, no) are called the **levels** of the categorical
+variable.
+
+```{marginfigure}
+![](http://web.stanford.edu/class/bios221/book/images/devil.png)
+Think of a categorical variable as having different alternative values. These are the levels, similar to the different alternatives at a gene locus: alleles.
+```
+
+Not all events are binary. For example, the genotypes in a diploid
+organism can take three levels (AA, Aa, aa).
+
+Sometimes the number of levels in a categorical variable is very large;
+examples include the number of different types of bacteria in a
+biological sample (hundreds or thousands) and the number of codons
+formed of 3 nucleotides (64 levels).
+
+When we measure a categorical variable on a sample, we often want to
+tally the frequencies of the different levels in a vector of counts. R
+has a special encoding for categorical variables and calls them
+**factors**
+`r tufte::margin_note('R makes sure that the factor variable will accept no other, “illegal” values, and this is useful for keeping your calculations safe.')`
+. Here we capture the different blood genotypes for 19 subjects in a
+vector which we tabulate.
+
+```{marginfigure}
+![](http://web.stanford.edu/class/bios221/book/images/devil.png)
+`c()` is one of the most basic functions. It collates elements of the
+same type into a vector. In the code shown here, the elements of
+`genotype` are character strings.
+```
+
+    genotype = c("AA","AO","BB","AO","OO","AO","AA","BO","BO",
+                 "AO","BB","AO","BO","AB","OO","AB","BB","AO","AO")
+    table(genotype)
+
+    ## genotype
+    ## AA AB AO BB BO OO 
+    ##  2  2  7  3  3  2
+
+On creating a *factor*, R automatically detects the levels. You can
+access the levels with the `levels` function.
+
+    genotypeF = factor(genotype)
+    levels(genotypeF)
+
+    ## [1] "AA" "AB" "AO" "BB" "BO" "OO"
+
+    table(genotypeF)
+
+    ## genotypeF
+    ## AA AB AO BB BO OO 
+    ##  2  2  7  3  3  2
+
+`r msmbstyle::question(label = "ques:one", text = "What if you want to create a factor that has some levels not yet in your data?")`
+
+`r msmbstyle::solution(text = "Look at the manual page of the factor function.")`
+
+```{marginfigure}
+![](http://web.stanford.edu/class/bios221/book/images/devil.png)
+It is not obvious from the output of the table function that the input was a factor; however if there had been another level with no instances, the table would also have contained that level, with a zero count.
+```
+
+If the order in which the data are observed doesn't matter, we call the
+random variable **exchangeable**. In that case, all the information
+available in the factor is summarized by the counts of the factor
+levels. We then say that the vector of frequencies is **sufficient** to
+capture all the relevant information in the data, thus providing an
+effective way of compressing the data.
+
+### Bernoulli trials
+
+Tossing a coin has two possible outcomes. This simple experiment, called
+a Bernoulli trial, is modeled using a so-called Bernoulli random
+variable. Understanding this building block will take you surprisingly
+far. We can use it to build more complex models.
