@@ -5,14 +5,13 @@ date: "`r Sys.Date()`"
 knit: "bookdown::preview_chapter"
 site: "bookdown::bookdown_site"
 link-citations: yes
-monofont: "Source Code Pro"
-monofontoptions: "Scale=0.7"
 output:
   msmbstyle::msmb_html_book:
     highlight: tango
     toc: TRUE
     toc_depth: 1
     split_by: chapter
+    split_bib: no
     margin_references: FALSE
 bibliography: msmbstyle-ex.bib
 editor_options: 
@@ -36,10 +35,8 @@ If we know the rules that the mechanisms under study follow, even if the
 outcomes are random, we can generate the probabilities of any events we
 are interested in by computations and standard probability laws. This is
 a *top-down* approach based on deduction and our knowledge of how to
-manipulate probabilities. In
-Chapter [2](https://www.huber.embl.de/msmb/Chap-Models.html#Chap:Models),
-you will see how to combine this with data-driven (*bottom-up*)
-statistical modeling.
+manipulate probabilities. In Chapter \@ref(Chap-Models), you will see
+how to combine this with data-driven (*bottom-up*) statistical modeling.
 
 ## Goals for this chapter
 
@@ -62,32 +59,34 @@ In this chapter we will:
 
 ## A real example
 
-Let's dive into an example where we have a probability model for the
-data generating process. Our model says that mutations along the genome
-of HIV (Human Immunodeficiency Virus) occur with a rate of
-$5 \times 10^{-4}$ per nucleotide per replication cycle. The rate is the
-same at each nucleotide position, and mutations at one position happen
-independently of what happens at other positions.
-`r tufte::margin_note('In practice, and strictly speaking, complete and utter independence will rarely hold in reality, if you look close enough. Thus, what modellers usually mean with such assertions is that any possible correlations or dependencies are so weak and rare that ignoring them is a good enough approximation.')`
-The genome size of HIV is about $10^4=10,000$ nucleotides, thus, after
-one cycle, the total number of mutations will follow a **Poisson**
-distribution
-`r tufte::margin_note('We will give more details later about this type of probability distribution.')`
-with rate $5 \times 10^{-4} \times 10^4 = 5$. What does that tell us?
+Let's dive into a real example, where we know the probability model for
+the process. We are told that mutations along the genome of HIV (Human
+Immunodeficiency Virus) occur at random with a rate of
+$5 \times 10^{-4}$ per nucleotide per replication cycle. This means that
+after one cycle, the number of mutations in a genome of about
+$10^4=10,000$ nucleotides will follow a **Poisson** distribution[^1]
+with rate 5. What does that tell us? This probability model predicts
+that the number of mutations over one replication cycle will be close to
+5, and that the variability of this estimate is $\sqrt{5}$ (the standard
+error). We now have baseline reference values for both the number of
+mutations we expect to see in a typical HIV strain and its variability.
 
-This probability model predicts that the number of mutations over one
-replication cycle will be close to 5, and that the variability of this
-estimate is $\sqrt{5}$ (the standard error). We now have baseline
-reference values for both the number of mutations we expect to see in a
-typical HIV strain and its variability.
+[^1]: We will give more details later about this type of probability
+    distribution.
 
 In fact, we can deduce even more detailed information. If we want to
 know how often 3 mutations could occur under the Poisson(5) model, we
 can use an R function to generate the probability of seeing $x=3$
 events, taking the value of the **rate parameter** of the Poisson
-distribution, called lambda (λ
-`r tufte::margin_note('Greek letters such as λ and μ often denote important parameters that characterize the probability distributions we use.')`
-), to be 5.
+distribution, called lambda ($\lambda$
+
+```{marginfigure}
+Greek letters such as $\lambda$ and $\mu$ often
+denote important parameters that characterize the probability
+distributions we use.
+```
+
+), to be $5$.
 
     dpois(x = 3, lambda = 5)
 
@@ -104,7 +103,7 @@ colon "`:`". We can see the probabilities by plotting them (Figure
 margins of this book are created by the code shown in the text.
 
 ```{marginfigure}
-![](http://web.stanford.edu/class/bios221/book/images/devil.png)
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
 Note how the output from R is formatted: the first line begins with the first item in the vector, hence the [1], and the second line begins with the 9th item, hence the [9]. This helps you keep track of elements in long vectors. The term vector is R parlance for an ordered list of elements of the same type (in this case, numbers).
 ```
 
@@ -141,7 +140,7 @@ possible outcomes (yes, no) are called the **levels** of the categorical
 variable.
 
 ```{marginfigure}
-![](http://web.stanford.edu/class/bios221/book/images/devil.png)
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
 Think of a categorical variable as having different alternative values. These are the levels, similar to the different alternatives at a gene locus: alleles.
 ```
 
@@ -156,13 +155,15 @@ formed of 3 nucleotides (64 levels).
 When we measure a categorical variable on a sample, we often want to
 tally the frequencies of the different levels in a vector of counts. R
 has a special encoding for categorical variables and calls them
-**factors**
-`r tufte::margin_note('R makes sure that the factor variable will accept no other, “illegal” values, and this is useful for keeping your calculations safe.')`
-. Here we capture the different blood genotypes for 19 subjects in a
-vector which we tabulate.
+**factors**[^2]. Here we capture the different blood genotypes for 19
+subjects in a vector which we tabulate.
+
+[^2]: R makes sure that the factor variable will accept no other,
+    "illegal" values, and this is useful for keeping your calculations
+    safe.
 
 ```{marginfigure}
-![](http://web.stanford.edu/class/bios221/book/images/devil.png)
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
 `c()` is one of the most basic functions. It collates elements of the
 same type into a vector. In the code shown here, the elements of
 `genotype` are character strings.
@@ -190,13 +191,24 @@ access the levels with the `levels` function.
     ## AA AB AO BB BO OO 
     ##  2  2  7  3  3  2
 
-`r msmbstyle::question(label = "ques:one", text = "What if you want to create a factor that has some levels not yet in your data?")`
+`r msmbstyle::question_begin(label = "ques:one")`
 
-`r msmbstyle::solution(text = "Look at the manual page of the factor function.")`
+What if you want to create a factor that has some levels not yet in your
+data?
+
+`r msmbstyle::question_end()`
+
+`r msmbstyle::solution_begin()`
+
+Look at the manual page of the `factor` function.
+
+`r msmbstyle::solution_end()`
 
 ```{marginfigure}
-![](http://web.stanford.edu/class/bios221/book/images/devil.png)
-It is not obvious from the output of the table function that the input was a factor; however if there had been another level with no instances, the table would also have contained that level, with a zero count.
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
+It is not obvious from the output of the `table` function that the input
+was a factor; however if there had been another level with no instances,
+the table would also have contained that level, with a zero count.
 ```
 
 If the order in which the data are observed doesn't matter, we call the
@@ -212,3 +224,325 @@ Tossing a coin has two possible outcomes. This simple experiment, called
 a Bernoulli trial, is modeled using a so-called Bernoulli random
 variable. Understanding this building block will take you surprisingly
 far. We can use it to build more complex models.
+
+Let's try a few experiments to see what some of these random variables
+look like. We use special **R** functions tailored to generate outcomes
+for each type of distribution. They all start with the letter `r`,
+followed by a specification of the model, here `rbinom`, where `binom`
+is the abbreviation used for binomial.
+
+Suppose we want to simulate a sequence of 15 fair coin tosses. To get
+the outcome of 15 Bernoulli trials with a probability of success equal
+to 0.5 (a fair coin), we write
+
+    rbinom(15, prob = 0.5, size = 1)
+
+    ##  [1] 1 1 0 0 1 1 0 0 0 1 0 1 0 1 0
+
+We use the `rbinom` function with a specific set of **parameters**[^3]:
+the first parameter is the number of trials we want to observe; here we
+chose 15. We designate by `prob` the probability of success. By `size=1`
+we declare that each individual trial consists of just one single coin
+toss.
+
+[^3]: For **R** functions, parameters are also called **argument**s.
+
+`r msmbstyle::question_begin(label = "ques:two")`
+
+Repeat this function call a number of times. Why isn't the answer always
+the same?
+
+`r msmbstyle::question_end()`
+
+Success and failure can have unequal probabilities in a Bernoulli trial,
+as long as the probabilities sum to one[^4]. To simulate twelve trials
+of throwing a ball into the two boxes as shown in Figure
+\@ref(fig:BallsinBoxes2), with probability of falling in the right-hand
+box $\frac{2}{3}$ and in the left-hand box $\frac{1}{3}$, we write
+
+[^4]: We call such events **complementary**.
+
+```{r BallsinBoxes2, fig.cap = "Figure 1.2: Two possible events with unequal probabilities. We model this by a Bernoulli distribution with probability parameter $p=2/3$.", fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("https://web.stanford.edu/class/bios221/book/images/BallsinBoxes2.jpg")
+```
+
+    rbinom(12, prob = 2/3, size = 1)
+
+    ##  [1] 1 1 1 1 0 0 1 1 0 0 1 0
+
+The 1 indicates success, meaning that the ball fell in the right-hand
+box, 0 means the ball fell in the left-hand box.
+
+### Binomial success counts
+
+If we only care how many balls go in the right-hand box, then the order
+of the throws doesn't matter[^5], and we can get this number by just
+taking the sum of the cells in the output vector. Therefore, instead of
+the binary vector we saw above, we only need to report a single number.
+In R, we can do this using one call to the `rbinom` function with the
+parameter `size` set to 12.
+
+[^5]: The exchangeability property.
+
+```{marginfigure}
+Two outcomes and a size of 1 or more makes it a binomial trial.
+If the size is 1, then this is the special case of the Bernoulli trial.
+```
+
+    rbinom(1, prob = 2/3, size = 12)
+
+    ## [1] 5
+
+This output tells us how many of the twelve balls fell into the
+right-hand box (the outcome that has probability 2/3). We use a random
+two-box model when we have only two possible outcomes such as heads or
+tails, success or failure, CpG or non-CpG, M or F, Y = pyrimidine or R =
+purine, diseased or healthy, true or false. We only need the probability
+of "success" $p$, because "failure" (the *complementary* event) will
+occur with probability $1−p$. When looking at the result of several such
+trials, if they are exchangeable[^6], we record only the number of
+successes. Therefore, SSSSSFSSSSFFFSF is summarized as (#Successes=10,
+#Failures=5), or as $x=10$, $n=15$.
+
+[^6]: One situation in which trials are exchangeable is if they are
+    **independent** of each other.
+
+The number of successes in 15 Bernoulli trials with a probability of
+success of 0.3 is called a **binomial** random variable or a random
+variable that follows the $B(15,0.3)$ distribution. To generate samples,
+we use a call to the `rbinom` function with the number of trials set to
+15:
+
+    set.seed(235569515)
+    rbinom(1, prob = 0.3, size = 15)
+
+    ## [1] 5
+
+```{marginfigure}
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
+What does `set.seed` do here?
+```
+
+`r msmbstyle::question_begin(label = "ques:3")`
+
+Repeat this function call ten times. What seems to be the most common
+outcome?
+
+`r msmbstyle::question_end()`
+
+`r msmbstyle::solution_begin()`
+
+The most frequent value is 4. In fact, the theoretical proportion of
+times that we expect 4 to appear is the value of the probability that
+$X=4$ if $X$ follows $B(15,0.3)$.
+
+`r msmbstyle::solution_end()`
+
+The complete **probability mass distribution** is available by typing:
+
+    probabilities = dbinom(0:15, prob = 0.3, size = 15)
+    round(probabilities, 2)
+
+    ##  [1] 0.00 0.03 0.09 0.17 0.22 0.21 0.15 0.08 0.03 0.01 0.00 0.00
+    ## [13] 0.00 0.00 0.00 0.00
+
+```{marginfigure}
+We use the function `round` to keep the number of printed decimal digits
+down to 2.
+```
+
+We can produce a bar plot of this distribution, shown in Figure
+\@ref(figure:chap1-binombarplot-1).
+
+```{r chap1-binombarplot-1, fig.cap = "Figure 1.3: Theoretical distribution of $B(15,0.3)$. The highest bar is at $x=4$. We have chosen to represent theoretical values in red throughout.", fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("https://web.stanford.edu/class/bios221/book/figure/chap1-binombarplot-1.png")
+```
+
+    barplot(probabilities, names.arg = 0:15, col = "red")
+
+The number of trials is the number we input in R as the `size` parameter
+and is often written $n$, while the probability of success is $p$.
+Mathematical theory tells us that for $X$ distributed as a binomial
+distribution with parameters $(n,p)$ written $X \sim B(n,p)$, the
+probability of seeing $X=k$ successes is
+
+$$
+\begin{equation*}
+\begin{aligned}
+P(X=k) &=& \frac{n\times (n-1)... (n-k+1)}{k\times(k-1)... 1}\; p^k\, (1-p)^{n-k} \\
+&=& \frac{n!}{(n-k)!k!}\;p^k\, (1-p)^{n-k}\\
+&=& { n \choose k}\; p^k\, (1-p)^{n-k}.\end{aligned}
+\end{equation*}
+$$
+
+```{marginfigure}
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
+Instead of $\frac{n!}{(n-k)!k!}$ we can use the special notation ${n \choose k}$ as a shortcut.
+```
+
+`r msmbstyle::question_begin(label = "ques:four")`
+
+What is the output of the formula for $k=3$, $p=2/3$, $n=4$?
+
+`r msmbstyle::question_end()`
+
+### Poisson distributions
+
+### A generative model for epitope detection
+
+## Multinomial distributions: the case of DNA
+
+### Simulating for power
+
+## Summary of this chapter
+
+## Further reading
+
+## Exercises
+
+`r msmbstyle::question_begin(label = "ques:ex1", header = "Exercise")`
+REPLACE ME
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin(label = "ques:ex2", header = "Exercise")`
+REPLACE ME
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin(label = "ques:ex3", header = "Exercise")`
+REPLACE ME
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin(label = "ques:ex4", header = "Exercise")`
+REPLACE ME
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin(label = "ques:ex5", header = "Exercise")`
+REPLACE ME
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin(label = "ques:ex6", header = "Exercise")`
+REPLACE ME
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin(label = "ques:ex7", header = "Exercise")`
+REPLACE ME
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin(label = "ques:ex8", header = "Exercise")`
+
+*C. elegans* genome nucleotide frequency: Is the mitochondrial sequence
+of *C. elegans* consistent with a model of equally likely nucleotides?
+**a.** Explore the nucleotide frequencies of chromosome M by using a
+dedicated function in the
+[**Biostrings**](https://bioconductor.org/packages/Biostrings/) package
+from Bioconductor.
+
+**b.** Test whether the *C. elegans* data is consistent with the uniform
+model (all nucleotide frequencies the same) using a simulation. Hint:
+This is our opportunity to use Bioconductor for the first time. Since
+Bioconductor's package management is more tightly controlled than
+CRAN's, we need to use a special `install` function (from the
+[**BiocManager**](https://cran.r-project.org/web/packages/BiocManager/)
+package) to install Bioconductor packages.
+
+    if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+    BiocManager::install(c("Biostrings", "BSgenome.Celegans.UCSC.ce2"))
+
+After that, we can load the genome sequence package as we load any other
+R packages.
+
+`r msmbstyle::question_end()`
+
+`r msmbstyle::solution_begin(toggle = FALSE)`
+
+    library("BSgenome.Celegans.UCSC.ce2")
+    Celegans
+
+    ## Worm genome:
+    ## # organism: Caenorhabditis elegans (Worm)
+    ## # genome: ce2
+    ## # provider: UCSC
+    ## # release date: Mar. 2004
+    ## # 7 sequences:
+    ## #   chrI   chrII  chrIII chrIV  chrV   chrX   chrM         
+    ## # (use 'seqnames()' to see all the sequence names, use the '$'
+    ## # or '[[' operator to access a given sequence)
+
+    seqnames(Celegans)
+
+    ## [1] "chrI"   "chrII"  "chrIII" "chrIV"  "chrV"   "chrX"  
+    ## [7] "chrM"
+
+    Celegans$chrM
+
+    ## 13794-letter DNAString object
+    ## seq: CAGTAAATAGTTTAATAAAAATATAGCA...GATATATACTTTGTATATATCTATATTA
+
+    class(Celegans$chrM)
+
+    ## [1] "DNAString"
+    ## attr(,"package")
+    ## [1] "Biostrings"
+
+    length(Celegans$chrM)
+
+    ## [1] 13794
+
+    library("Biostrings")
+    lfM = letterFrequency(Celegans$chrM, letters=c("A", "C", "G", "T"))
+    lfM
+
+    ##    A    C    G    T 
+    ## 4335 1225 2055 6179
+
+    sum(lfM)
+
+    ## [1] 13794
+
+    lfM / sum(lfM)
+
+    ##          A          C          G          T 
+    ## 0.31426707 0.08880673 0.14897782 0.44794838
+
+Create a random (each letter with equal probability) sequence of the
+same length as the *C. elegans* chromosome M:
+
+    t(rmultinom(1, length(Celegans$chrM), p = rep(1/4, 4)))
+
+    ##      [,1] [,2] [,3] [,4]
+    ## [1,] 3409 3486 3476 3423
+
+The expected frequencies are just
+
+    length(Celegans$chrM) / 4
+
+    ## [1] 3448.5
+
+We're going to compute a statistic that measures how close two
+multinomial outputs are to each other. We'll take the average squared
+difference between expected (`e`) and observed (`o`) counts, scaled by
+`e`. We will call the function `oestat`.
+
+    oestat = function(o, e) {
+      sum((e-o)^2 / e)
+    }
+    oe = oestat(o = lfM, e = length(Celegans$chrM) / 4)
+    oe
+
+    ## [1] 4386.634
+
+Is this larger than what randomness could explain? We already saw above
+a set of typical counts we could expect under the null model. But we
+need a whole set (distribution) of values. We compute these using the
+replicate function that evaluates a function many times. We run the
+following:
+
+    B = 10000
+    n = length(Celegans$chrM)
+    expected = rep(n / 4, 4)
+    oenull = replicate(B,
+      oestat(e = expected, o = rmultinom(1, n, p = rep(1/4, 4))))
+    ", toggle = FALSE)
+
+`r msmbstyle::solution_end()`
