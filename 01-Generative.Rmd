@@ -465,6 +465,11 @@ Now we are ready to use probability calculations in a case study.
 
 ## Further reading
 
+- The elementary book by @freedman1997statistics provides the best introduction to probability through the type of box models we mention here.
+- The book by @durbin1998biological covers many useful probability distributions and provides in its appendices a more complete view of the theoretical background in probability theory and its applications to sequences in biology.
+- Monte Carlo methods are used extensively in modern statistics. @robert_introducing_2010 provides an introduction to these methods using R.
+- Chapter 6 will cover the subject of hypothesis testing. We also suggest @rice2006mathematical for more advanced material useful for the type of more advanced probability distributions, beta, gamma, exponentials we often use in data analyses.
+
 ## Exercises
 
 `r msmbstyle::question_begin(label = "ques:ex1", header = "Exercise")`
