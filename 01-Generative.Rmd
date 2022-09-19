@@ -463,6 +463,40 @@ Now we are ready to use probability calculations in a case study.
 
 ## Summary of this chapter
 
+We have used mathematical formulæ and R to compute probabilities of various discrete
+*events* that can we modeled with a few basic distributions:
+**The Bernoulli distribution** was our most basic building block
+– it is used to represent a single binary trial such as a coin flip.
+We can code the outcomes as 0 and 1.
+We call $p$ the probability of success (the 1 outcome).
+
+**The *binomial* distribution** is used for the number of 1s in $n$
+binary trial and we generate the probabilities of seeing $k$
+successes using the R function `dbinom`.
+We also saw that we could simulate an $n$ trial binomial using the function `rbinom`.
+
+**The *Poisson* distribution** is most appropriate for cases when $p$
+is small (the 1s are rare).
+It has only one parameter $\lambda$,
+and the Poisson distribution for $\lambda=np$
+is approximately the same as the binomial distribution for $(n,p)$ if $p$ is small.
+We used the Poisson distribution to model the number of randomly occurring false positives in an assay that tested for epitopes along a sequence,
+presuming that the per-position false positive rate $p$ was small.
+We saw how such a parametric model enabled us to compute the probabilities of extreme events,
+as long as we knew all the parameters.
+
+**The *multinomial* distribution** is used for discrete events that have more than two possible outcomes or **levels**.
+The power example showed us how to use Monte Carlo simulations to decide how much data we need to collect if we want to test whether a multinomial model with equal probabilities is consistent with the data.
+We used probability distributions and probabilistic models to evaluate hypotheses about how our data were generated,
+by making assumptions about the generative models.
+We term the probability of seeing the data, given a hypothesis, a **p-value**.
+This is not the same as the probability that the hypothesis is true!
+
+```{marginfigure}
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
+$P(H_0\;|\;\text{data})$ is not the same as a p-value $P(\text{data}\;|\;H_0)$.
+```
+
 ## Further reading
 
 - The elementary book by @freedman1997statistics provides the best introduction to probability through the type of box models we mention here.
