@@ -459,6 +459,84 @@ Now we are ready to use probability calculations in a case study.
 
 ## Multinomial distributions: the case of DNA
 
+**More than two outcomes.**
+
+When modeling four possible outcomes, as for instance the boxes in Figure
+\@ref(fig:BallsinBoxes4)
+or when studying counts of the four nucleotides A,C,G and T, we need to extend the binomial model.
+
+```{r BallsinBoxes4, fig.cap = "The boxes represent four outcomes or levels of a discrete **categorical** variable. The box on the right represents the more likely outcome.", fig.margin=TRUE, echo=FALSE}
+knitr::include_graphics("http://web.stanford.edu/class/bios221/book/images/BallsinBoxes4.jpg")
+```
+
+Recall that when using the binomial,
+we can consider unequal probabilities for the two outcomes by assigning a probability 
+$p=P(1)=p_1$
+to the outcome 1 and
+$1-p=p(0)=p_0$
+to the outcome 0.
+When there are more than two possible outcomes,
+say A,C,G and T,
+we can think of throwing balls into boxes of differing sizes corresponding to different probabilities,
+and we can label these probabilites
+$p_A,p_C,p_G,p_T$.
+Just as in the binomial case the sum of the probabilities of all possible outcomes is 1,
+$p_A+p_C+p_G+p_T=1$.
+
+```{marginfigure}
+<img src="http://web.stanford.edu/class/bios221/book/images/devil.png" width="30%">
+You are secretly meeting a continuous distribution here, the uniform distribution:
+`runif`.
+```
+
+`r msmbstyle::question_begin(header = "Task")`
+
+Experiment with the random number generator that generates all possible numbers between
+$0$ and $1$
+through the function called `runif`.
+Use it to generate a random variable with 4 levels (A, C, G, T) where
+$p_{\text{A}}=\frac{1}{8},  p_{\text{C}}=\frac{3}{8},  p_{\text{G}}=\frac{3}{8},  p_{\text{T}}=\frac{1}{8}$.
+
+**Mathematical formulation.**
+Multinomial distributions are the most important model for tallying counts and R uses a general formula to compute the probability of a **multinomial** vector of counts
+$(x_1,...,x_m)$
+for outcomes that have $m$ boxes with probabilities
+$p_1,...,p_m$:
+
+```{marginfigure}
+The first term reads: the joint probability of observing count
+$x_1$ in box 1 and $x_2$ in 2 and … $x_m$ in box m,
+given that box 1 has probability $p_1$, box 2 has probability 
+$p_2$, … and box $m$ has probability $p_m$.
+```
+
+$\begin{equation*}
+\begin{aligned}
+P(x_1,x_2,...,x_m \;|\; p_1,...,p_m)
+  &=&\frac{n!}{\prod x_i!}\prod p_i^{x_i}\\
+  &=&{{n}\choose{x_1,x_2,...,x_m}} \; p_1^{x_1}\,p_2^{x_2} \cdots p_m^{x_m}.\end{aligned}
+\end{equation*}$
+
+```{marginfigure}
+The term in brackets is called the multinomial coefficient and is an abbreviation for
+${{n}\choose{x_1,x_2,...,x_m}}=\frac{n!}{x_1!x_2!\cdots x_m!}.$
+
+So this is a generalization of the binomial coefficient – for 
+$m=2$ it is the same as the binomial coefficient.
+```
+
+`r msmbstyle::question_end()`
+
+`r msmbstyle::question_begin()`
+
+Suppose we have four boxes that are equally likely.
+Using the formula,
+what is the probability of observing 4 in the first box,
+2 in the second box,
+and none in the two other boxes?
+
+`r msmbstyle::question_end()`
+
 ### Simulating for power
 
 ## Summary of this chapter
